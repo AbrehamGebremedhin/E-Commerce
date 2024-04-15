@@ -64,7 +64,7 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`You are not allowed to delete this product`, 403));
     }
 
-    product.deleteOne();
+    await product.deleteOne();
 
     res.status(200).json({
         success: true,

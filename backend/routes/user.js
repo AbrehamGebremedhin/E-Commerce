@@ -10,7 +10,7 @@ const router = express.Router();
 // router.use(authorize('admin'));
 
 router.route('/allUsers').get(advancedResults(User), getAllUsers);
-router.route('/:id').get(getUser).put(updateUser).delete(deleteUser);
+router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 router.route('/createUser').post(registerUser);
 
 

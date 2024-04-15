@@ -1,6 +1,8 @@
  const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/User');
+const sendEmail = require('../utils/sendemail');
+
 
 //Register User
 exports.addUser = asyncHandler( async(req, res, next) => {
@@ -132,7 +134,7 @@ exports.resetPassword = asyncHandler( async(req, res, next) => {
 //Update User Information
 exports.updateUser = asyncHandler( async(req, res, next) => {
     const fieldsToUpdate = {
-        name: req.body.name,
+        username: req.body.username,
         email: req.body.email
     }
 

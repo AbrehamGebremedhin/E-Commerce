@@ -1,3 +1,4 @@
 *.env
 *.gitignore
 backend/node_modules
+backend/public 

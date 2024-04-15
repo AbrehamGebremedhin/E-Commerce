@@ -46,9 +46,15 @@ exports.updateUser = asyncHandler( async(req,res,next) => {
 
 //Delete a user
 exports.deleteUser = asyncHandler( async(req,res,next) => {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findById(req.params.id);
 
-    res.status(202).json({
+    if(!user){
+        return next(new ErrorResponse(`No user account found with this id: ${req.params.id}`, 404));
+    }
+
+    await user.deleteOne();
+
+    res.status(200).json({
         success: true,
         data: {}
     })

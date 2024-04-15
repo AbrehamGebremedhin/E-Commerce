@@ -10,9 +10,10 @@ const connectDB = require('./config/connectDB')
 dotenv.config({path: './config/config.env'});
 connectDB();
 
-const products = require('./routes/products')
-const users = require('./routes/users')
-const auth = require('./routes/auth')
+const product = require('./routes/product');
+const user = require('./routes/user');
+const auth = require('./routes/auth');
+const inventory = require('./routes/inventory');
 
 const app = express();
 
@@ -28,10 +29,10 @@ if(process.env.NODE_ENV === 'development'){
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/v1/products', products);
-// app.use('/api/v1/courses', courses);
+app.use('/api/v1/products', product);
+app.use('/api/v1/inventories', inventory);
 app.use('/api/v1/auth', auth);
-app.use('/api/v1/users', users);
+app.use('/api/v1/users', user);
 // app.use('/api/v1/reviews', reviews);
 app.use(errorHandler);
 
