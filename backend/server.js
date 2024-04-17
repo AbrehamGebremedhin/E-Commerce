@@ -14,6 +14,9 @@ const product = require('./routes/product');
 const user = require('./routes/user');
 const auth = require('./routes/auth');
 const inventory = require('./routes/inventory');
+const cart = require('./routes/cart');
+const item = require('./routes/item');
+
 
 const app = express();
 
@@ -33,7 +36,8 @@ app.use('/api/v1/products', product);
 app.use('/api/v1/inventories', inventory);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', user);
-// app.use('/api/v1/reviews', reviews);
+app.use('/api/v1/carts', cart);
+app.use('/api/v1/items', item);
 app.use(errorHandler);
 
 const PORT= process.env.PORT || 5000;
