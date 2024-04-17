@@ -26,21 +26,57 @@ const ItemSchema = new mongoose.Schema({
     toObject: { virtuals: true}
 });
 
+//Calculate total cart Price
+ItemSchema.statics.getTotalPrice = async function (cartId) {
+    const obj = await this.aggregate([
+        {
+            $match: { cart: cartId }
+        },
+        {
+            $lookup: {
+                from: 'products', // Name of the Product collection
+                localField: 'product',
+                foreignField: '_id',
+                as: 'product'
+            }
+        },
+        {
+            $unwind: '$product'
+        },
+        {
+            $group: {
+                _id: '$cart',
+                totalPrice: { 
+                    $sum: { 
+                        $multiply: 
+                        [
+                            '$product.Price', '$quantity'
+                        ] 
+                    } 
+                }
+            }
+        }
+    ]);
 
-ItemSchema.pre('save', async function (next) {
     try {
-        // Find the budget document for the same category and user
-        const cart =  await Cart.findById(this.cart);
-        if (!cart) return next(new Error("The Cart does not exist"));
-        
-        cart.totalPrice += Number(this.quantity * this.product.price);
-        await cart.save();
-
-        next();
-    } catch (error) {
-        next(error);
+        await mongoose.model('Cart').findByIdAndUpdate(cartId, {
+            totalPrice: obj[0].totalPrice
+        });
+    } catch (err) {
+        console.log(err);
     }
+};
+
+
+// Call getTotalPrice after saving an item
+ItemSchema.post('save', async function () {
+    await this.constructor.getTotalPrice(this.cart);
 });
 
+// Call getTotalPrice before deleting an item
+ItemSchema.pre('deleteOne', async function (next) {
+    await this.constructor.getTotalPrice(this.cart);
+    next();
+});
 
 module.exports = mongoose.model('Item', ItemSchema);

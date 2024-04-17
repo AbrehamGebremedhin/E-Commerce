@@ -11,7 +11,7 @@ exports.getItems = asyncHandler(async (req, res, next) => {
 
 exports.addItem = asyncHandler(async (req, res, next) => {
     const user = req.user.id;
-    const cart = await Cart.findOne({user: req.user.id, status: 'Active'}).orFail(Cart.create(user));
+    const cart = await Cart.findOne({user: req.user.id, status: 'Active'});
     req.body.cart = cart.id;
     req.body.product = req.body.product;
     const item = await Item.create(req.body);
